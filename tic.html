@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .game-board {
+            display: inline-block;
+            border: 1px solid #ccc;
+        }
+
+        .row {
+            display: flex;
+        }
+
+        .cell {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .cell:hover {
+            background-color: #eee;
+        }
+
+        .game-info {
+            margin-top: 20px;
+        }
+
+        #reset-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tic Tac Toe</h1>
+    <div class="game-board">
+        <div class="row">
+            <div class="cell" id="cell-0"></div>
+            <div class="cell" id="cell-1"></div>
+            <div class="cell" id="cell-2"></div>
+        </div>
+        <div class="row">
+            <div class="cell" id="cell-3"></div>
+            <div class="cell" id="cell-4"></div>
+            <div class="cell" id="cell-5"></div>
+        </div>
+        <div class="row">
+            <div class="cell" id="cell-6"></div>
+            <div class="cell" id="cell-7"></div>
+            <div class="cell" id="cell-8"></div>
+        </div>
+    </div>
+    <div class="game-info">
+        <p id="turn">Player X's turn</p>
+        <button id="reset-btn">Reset Game</button>
+    </div>
+
+    <script>
+        let currentPlayer = 'X';
+        let gameBoard = ['', '', '', '', '', '', '', '', ''];
+        let gameOver = false;
+
+        const cells = document.querySelectorAll('.cell');
+        const turnElement = document.getElementById('turn');
+        const resetButton = document.getElementById('reset-btn');
+
+        cells.forEach((cell, index) => {
+            cell.addEventListener('click', () => {
+                if (gameOver) return;
+                if (gameBoard[index] !== '') return;
+
+                gameBoard[index] = currentPlayer;
+                cell.textContent = currentPlayer;
+
+                checkWinner();
+                switchPlayer();
+            });
+        });
+
+        resetButton.addEventListener('click', resetGame);
+
+        function checkWinner() {
+            const winningCombinations = [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8],
+                [0, 4, 8],
+                [2, 4, 6]
+            ];
+
+            for (const combination of winningCombinations) {
+                if (gameBoard[combination[0]] === gameBoard[combination[1]] &&
+                    gameBoard[combination[1]] === gameBoard[combination[2]] &&
+                    gameBoard[combination[0]] !== '') {
+                    gameOver = true;
+                    turnElement.textContent = `Player ${gameBoard[combination[0]]} wins!`;
+                    return;
+                }
+            }
+
+            if (!gameBoard.includes('')) {
+                gameOver = true;
+                turnElement.textContent = 'It\'s a draw!';
+            }
+        }
+
+        function switchPlayer() {
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            turnElement.textContent = `Player ${currentPlayer}'s turn`'s turn`;
+        }
+
+        function resetGame() {
+            currentPlayer = ''X'';
+            gameBoard = ['''', '''', '''', '''', '''', '''', '''', '''', ''''];
+            gameOver = false;
+            cells.forEach(cell => cell.textContent = '''');
+            turnElement.textContent = `Player X'`Player X's turn`;
+        }
+    </script>
+</body>
+</html>
